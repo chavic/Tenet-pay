@@ -21,37 +21,34 @@ pub async fn api_version() {
     log(&json_object)
 }
 
-pub async fn authorize_instagram(code: Option<String>) {
-    if let Some(inst_code) = code {
-        let query = format!(
-            r#"{{ "query": "mutation($code: String!){{ authorizeInstagram(code: $code) {{ bearer }}  }}", "variables": {{ "code": "{}"  }} }}"#,
-            inst_code
-        );
+pub async fn verify_code(code: String) {
+    let query = format!(
+        r#"{{ "query": "mutation($code: String!){{ verify(code: $code) {{ bearer }}  }}", "variables": {{ "code": "{}"  }} }}"#,
+        code
+    );
 
-        let response = utils::fetch_graphql(&query).await;
+    let response = utils::fetch_graphql(&query).await;
 
-        let json_object = JsFuture::from(response.json().expect("Failed to get Json"))
-            .await
-            .expect("Failed to convert to future");
+    let json_object = JsFuture::from(response.json().expect("Failed to get Json"))
+        .await
+        .expect("Failed to convert to future");
 
-        let data: HashMap<String, Value> =
-            json_object.into_serde().expect("Failed to Create hashMap");
+    let data: HashMap<String, Value> = json_object.into_serde().expect("Failed to Create hashMap");
 
-        let value = data.get("data").unwrap();
-        let token = match value {
-            Value::Object(_) => match &value["authorizeInstagram"]["bearer"] {
-                Value::String(token) => Some(token),
-                _ => None,
-            },
+    let value = data.get("data").unwrap();
+    let token = match value {
+        Value::Object(_) => match &value["authorizeInstagram"]["bearer"] {
+            Value::String(token) => Some(token),
             _ => None,
-        };
-    }
+        },
+        _ => None,
+    };
 }
 
-pub async fn stripe_authorization(user_url: &str) {
+pub async fn generate_code(issuer: &str, phone_number: &str) {
     let query = format!(
-        r#"{{  "query": "{{ stripeAuthorization(userUrl: \"{}\") {{authorizeUrl}} }}" }}"#,
-        user_url
+        r#"{{  "query": "{{ generateCode(issuer: \"{}\", phone_number: \"{}\") }}" }}"#,
+        issuer, phone_number
     );
 
     let response = utils::fetch_graphql(&query).await;

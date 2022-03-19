@@ -7,6 +7,7 @@ mod auth;
 mod errors;
 mod graphql;
 mod jwt;
+mod router;
 
 mod settings;
 
@@ -47,7 +48,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(db.clone())
             .app_data(web::Data::new(settings.clone()))
             .configure(graphql::route)
-        // .configure(router::frontend_routes)
+            .configure(router::frontend_routes)
     })
     .bind(("127.0.0.1", port))
     .unwrap()

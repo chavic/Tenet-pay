@@ -3,6 +3,7 @@ use dominator::{clone, html, routing, Dom};
 use futures_signals::signal::{Mutable, SignalExt};
 use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
+use wasm_bindgen_futures::spawn_local;
 use web_sys::console::log_1 as log;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -18,7 +19,9 @@ impl App {
   }
 
   pub fn render(state: Arc<Self>) -> Dom {
-    graphql::api_version();
+    spawn_local(async {
+      graphql::api_version().await;
+    });
 
     html!("div", {
       .attr("id","root")
