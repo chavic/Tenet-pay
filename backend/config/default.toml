@@ -1,0 +1,8 @@
+[server]
+port = 8080
+domain = "localhost"
+
+[database]
+host = "172.17.0.2"
+port = 9042
+

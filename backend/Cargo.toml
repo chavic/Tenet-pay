@@ -1,0 +1,40 @@
+[package]
+name = "tenet-pay"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "*"
+actix-web = "4.0.1"
+actix-cors = "0.6.1"
+actix-multipart = "0.4.0"
+actix-web-actors = "4.1.0"
+actix-files = "0.6.0"
+
+futures = "0.3"
+
+juniper = "0.15.7"
+juniper_actix = "0.4.0"
+
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+config = "0.11.0"
+
+uuid = { version = "0.8", features = ["serde", "v4"] }
+time = "0.3.4"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1.0"
+mysql = "22.1.0"
+
+lazy_static = "1"
+log = "0.4"
+env_logger ="0.8"
+
+rand = "0.8"
+argon2rs = "0.2"
+jsonwebtoken = "7.2"
+
+regex = "1"
