@@ -11,13 +11,13 @@ mod router;
 
 mod settings;
 
+use crate::jwt::manager::*;
 use actix_cors::Cors;
 use actix_files::Files;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
-use std::sync::Arc;
-
 use mysql::*;
+use std::sync::Arc;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -27,6 +27,36 @@ async fn main() -> std::io::Result<()> {
         Settings::new().unwrap()
     };
 
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    let demo_issuer = "victor cha".to_string();
+    let demo_phone = "09856786756465".to_string();
+    println!(
+        "Demo Issuer: {}, Demo Phone Number: {}",
+        demo_issuer, demo_phone
+    );
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    let code = create_token(demo_issuer, demo_phone, 30);
+    println!("Code: {:?}", code);
+    let decoded = decode_token(&code.unwrap());
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("{:?}", decoded);
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
+    println!("\n");
     // mysql
     let opts = OptsBuilder::new();
     let db = Arc::new(Pool::new(opts));
